@@ -1,0 +1,21 @@
+const express = require ('express');
+const path = require('path');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const app = express();
+const dotenv = require("dotenv");
+dotenv.config({ path: "./config.env" });
+app.use(cookieParser());
+const fileRoutes = require('./routes/file-upload-routes');
+const userRoutes = require('./routes/userData');
+require('./databse/database')();
+const PORT = process.env.PORT || 5000;
+// app.use(cors());
+app.use(cors());
+// app.use(cookies());
+app.use(express.json());
+app.use('/uploads',express.static(path.join(__dirname,'uploads')));
+app.use('/api',fileRoutes.router);
+app.use('/user',userRoutes);
+
+app.listen(PORT,()=>console.log(`server listen on port number ${PORT}`));
